@@ -15,35 +15,60 @@
 unsigned char tmpA = 0x00;
 unsigned char tmpB = 0x00;
 
-enum SM1_STATES { SM1_PB0On, SM1_PB1On } SM1_STATE;
+enum SM1_STATES { SM1_01, SM1_Wait10, SM1_10, SM1_Wait01 } SM1_STATE;
 void Tick_Toggle() { 
 switch(SM1_STATE) { 
-    case SM1_PB0On:
+    case SM1_01:
         if (tmpA) {
-            SM1_STATE = SM1_PB1On;
+            SM1_STATE = SM1_Wait10;
         }
         else {
-            SM1_STATE = SM1_PB0On;
+            SM1_STATE = SM1_01;
         }
         break;
-    case SM1_PB1On:
+    case SM1_Wait10:
         if (tmpA) {
-            SM1_STATE = SM1_PB0On;
+            SM1_STATE = SM1_Wait10;
         }
         else {
-            SM1_STATE = SM1_PB1On;
+            SM1_STATE = SM1_10;
+        }
+        break;
+    case SM1_10:
+        if (tmpA) {
+            SM1_STATE = SM1_Wait01;
+        }
+        else {
+            SM1_STATE = SM1_10;
+        }
+        break;
+    case SM1_Wait01:
+        if (tmpA) {
+            SM1_STATE = SM1_Wait01;
+        }
+        else {
+            SM1_STATE = SM1_01;
         }
         break;
     default:
-        SM1_STATE = SM1_PB0On;
+        SM1_STATE = SM1_01;
         break;
 }
 switch(SM1_STATE) { 
-    case SM1_PB0On:
-        tmpB = 0x01; // PB0 = 1, PB1 = 0
+    case SM1_01:
+        tmpB = 0x01; // B = 01
         break;
-    case SM1_PB1On:
-        tmpB = 0x01; // PB0 = 0, PB1 = 1
+    case SM1_Wait10:
+        tmpB = 0x02; // B = 10
+        break;
+    case SM1_10:
+        tmpB = 0x02; // B = 10
+        break;
+    case SM1_Wait01:
+        tmpB = 0x01; // B = 01
+        break;
+    default:
+        tmpB = 0xFF;
         break;
 }
 }
@@ -53,12 +78,13 @@ int main(void) {
         DDRA = 0x00; PORTA = 0xFF; // Configure port A's 8 pins as inputs, initalize to 1s.
         DDRB = 0xFF; PORTB = 0x00; // Configure port B's 8 pins as outputs, initalize to 0s.
 
-/* Insert your solution below */
+    /* Insert your solution below */
+    
+    SM1_STATE = SM1_01;
     while (1) {
         tmpA = PINA;
-        SM1_STATE = SM1_PB0On;
         Tick_Toggle();      // Execute one SM tick
+        PORTB = tmpB;
     }
     return 1;
-
 }
