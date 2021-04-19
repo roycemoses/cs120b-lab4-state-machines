@@ -41,6 +41,17 @@ tests = [ {'description': 'PINA: 0x00, 0x00, 0x00, 0x00 => PORTB: 0x00',
         {'inputs': [('PINA', 0x00)], 'iterations': 2}],
     'expected': [('PORTB',0x00)],
     },
+    {'description': 'Input the code TWICE. It should unlock and then lock again. => PORTB: 0x00',
+    'steps': [{'inputs': [('PINA', 0x04)], 'iterations': 2},
+        {'inputs': [('PINA', 0x00)], 'iterations': 2},
+        {'inputs': [('PINA', 0x02)], 'iterations': 2},
+        {'inputs': [('PINA', 0x00)], 'iterations': 2},
+        {'inputs': [('PINA', 0x04)], 'iterations': 2},
+        {'inputs': [('PINA', 0x00)], 'iterations': 2},
+        {'inputs': [('PINA', 0x02)], 'iterations': 2},
+        {'inputs': [('PINA', 0x00)], 'iterations': 2}],
+    'expected': [('PORTB',0x00)],
+    },
     ]
 
 

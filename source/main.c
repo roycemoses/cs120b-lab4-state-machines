@@ -1,7 +1,8 @@
-/* 	Author: rmose005
- *	Partner(s) Name: 
+/*	
+ 	Author: rmose005
+	Partner(s) Name: 
  *	Lab Section:
- *	 *	Assignment: Lab #4  Exercise #3
+ *	 *	Assignment: Lab #4  Exercise #4
  *	  *	Exercise Description: [optional - include for your own benefit]
  *	   *
  *	    *	I acknowledge all content contained herein, excluding template or example
@@ -79,7 +80,7 @@ void Tick_Lock() {
         case SM1_ReleaseA2:
             break;
         case SM1_A1:
-            tmpB = 0x01;
+            tmpB = (tmpB) ? 0x00 : 0x01;
             break;
         case SM1_Lock:
             tmpB = 0x00;
@@ -103,4 +104,3 @@ int main(void) {
     }
     return 1;
 }
-
